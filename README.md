@@ -25,3 +25,8 @@ To view `statistics`, just run the command:
 ```
 bin/story statistics
 ```
+
+## Running the test suite
+```
+bundle exec rspec --format doc
+```

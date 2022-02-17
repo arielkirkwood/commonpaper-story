@@ -121,11 +121,42 @@ RSpec.describe Story do
   end
 
   describe "#statistics" do
+    let(:csv_rows) { [CSV::Row.new([], %w[2 mile school blue rock])] }
+
     before { allow(CSV).to receive(:table).with(described_class::STORIES_FILE).and_return(CSV::Table.new(csv_rows)) }
 
-    context "one row of data" do
-      let(:csv_rows) { [CSV::Row.new([], %w[2 mile school blue rock])] }
-      it { expect { subject.statistics }.to output(/Statistics on 1 stored records:/).to_stdout }
+    it { expect { subject.statistics }.to output(/Statistics on 1 stored records:/).to_stdout }
+
+    context "many rows of data" do
+      let(:count) { 42 }
+      let(:csv_rows) do
+        rows = []
+        count.times { rows.push(CSV::Row.new([], %w[2 mile school blue rock])) }
+        rows
+      end
+
+      it { expect { subject.statistics }.to output(/Statistics on #{count} stored records:/).to_stdout }
+    end
+
+    describe "number statistics" do
+      it { expect { subject.statistics }.to output(/Highest `number`:/).to_stdout }
+      it { expect { subject.statistics }.to output(/Lowest `number`:/).to_stdout }
+    end
+
+    describe "unit of length statistics" do
+      it { expect { subject.statistics }.to output(/Most frequent `unit_of_measure`:/).to_stdout }
+    end
+
+    describe "place statistics" do
+      it { expect { subject.statistics }.to output(/Most frequent `place`:/).to_stdout }
+    end
+
+    describe "adjective statistics" do
+      it { expect { subject.statistics }.to output(/Most frequent `noun`:/).to_stdout }
+    end
+
+    describe "noun statistics" do
+      it { expect { subject.statistics }.to output(/Most frequent `adjective`:/).to_stdout }
     end
   end
 end

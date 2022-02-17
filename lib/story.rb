@@ -33,6 +33,18 @@ class Story < Thor
     table = CSV.table(STORIES_FILE)
 
     puts "Statistics on #{table.size} stored records:"
+    puts ""
+    puts "Highest `number`:"
+    puts ""
+    puts "Lowest `number`:"
+    puts ""
+    puts "Most frequent `unit_of_measure`:"
+    puts ""
+    puts "Most frequent `place`:"
+    puts ""
+    puts "Most frequent `adjective`:"
+    puts ""
+    puts "Most frequent `noun`:"
   end
 
   private

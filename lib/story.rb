@@ -14,5 +14,3 @@ class Story < Thor
     puts "The provided JSON input is invalid."
   end
 end
-
-Story.start(ARGV)

@@ -8,6 +8,6 @@ With Ruby installed, you should have access to Bundler via `bundle`; execute `bu
 
 ## Running the application
 From there, you can generate a story passing escaped JSON wrapped in double quotes:
-`ruby lib/story.rb generate "{\"number\": 2, \"unit_of_measure\": \"mile\", \"place\": \"school\", \"adjective\": \"blue\", \"noun\": \"rock\"}"`
+`bin/story generate "{\"number\": 2, \"unit_of_measure\": \"mile\", \"place\": \"school\", \"adjective\": \"blue\", \"noun\": \"rock\"}"`
 
 Statistics coming next!

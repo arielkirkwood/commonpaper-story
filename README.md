@@ -7,8 +7,7 @@ To run the applications in this repo, you'll need to have Ruby 3.0 installed.
 With Ruby installed, you should have access to Bundler via `bundle`; execute `bundle` to install the dependencies for this project.
 
 ## Running the application
-From there, you can generate a story with `echo "story" | xargs ruby lib/story.rb story`.
+From there, you can generate a story passing escaped JSON wrapped in double quotes:
+`ruby lib/story.rb generate "{\"number\": 2, \"unit_of_measure\": \"mile\", \"place\": \"school\", \"adjective\": \"blue\", \"noun\": \"rock\"}"`
 
-Actual JSON parsing coming soon!
-
-Statistics coming after!
+Statistics coming next!

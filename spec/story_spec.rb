@@ -24,7 +24,7 @@ RSpec.describe Story do
       describe "parsing failure" do
         let(:json) { '["test" : 123]' }
 
-        it { expect { subject.generate(json) }.to output("The provided JSON input failed to parse.\n").to_stdout }
+        it { expect { subject.generate(json) }.to output(/The provided JSON input failed to parse./).to_stdout }
       end
 
       describe "missing properties required by the template" do
@@ -37,7 +37,7 @@ RSpec.describe Story do
           }.to_json
         end
 
-        it { expect { subject.generate(json) }.to output("The provided JSON is valid, but one or more of your inputs is missing in the JSON body.\n").to_stdout }
+        it { expect { subject.generate(json) }.to output(/The provided JSON is valid, but one or more of your inputs is missing in the JSON body./).to_stdout }
       end
     end
 
@@ -46,19 +46,19 @@ RSpec.describe Story do
         context "when non-numeric" do
           let(:number) { "a" }
 
-          it { expect { subject.generate(json) }.to output("The `number` input is not a number.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `number` input is not a number./).to_stdout }
         end
 
         context "when blank" do
           let(:number) { "" }
 
-          it { expect { subject.generate(json) }.to output("The `number` input is blank.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `number` input is blank./).to_stdout }
         end
 
         context "when too many digits" do
           let(:number) { 9999 }
 
-          it { expect { subject.generate(json) }.to output("The `number` input is too long.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `number` input is too long./).to_stdout }
         end
       end
 
@@ -66,13 +66,13 @@ RSpec.describe Story do
         context "when blank" do
           let(:unit_of_measure) { "" }
 
-          it { expect { subject.generate(json) }.to output("The `unit_of_measure` input is blank.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `unit_of_measure` input is blank./).to_stdout }
         end
 
         context "when too long" do
           let(:unit_of_measure) { "miles and miles" }
 
-          it { expect { subject.generate(json) }.to output("The `unit_of_measure` input is too long.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `unit_of_measure` input is too long./).to_stdout }
         end
       end
 
@@ -80,13 +80,13 @@ RSpec.describe Story do
         context "when blank" do
           let(:place) { "" }
 
-          it { expect { subject.generate(json) }.to output("The `place` input is blank.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `place` input is blank./).to_stdout }
         end
 
         context "when too long" do
           let(:place) { "a place that exceeds my imagination" }
 
-          it { expect { subject.generate(json) }.to output("The `place` input is too long.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `place` input is too long./).to_stdout }
         end
       end
 
@@ -94,13 +94,13 @@ RSpec.describe Story do
         context "when blank" do
           let(:adjective) { "" }
 
-          it { expect { subject.generate(json) }.to output("The `adjective` input is blank.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `adjective` input is blank./).to_stdout }
         end
 
         context "when too long" do
           let(:adjective) { "supercalifragilistic" }
 
-          it { expect { subject.generate(json) }.to output("The `adjective` input is too long.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `adjective` input is too long./).to_stdout }
         end
       end
 
@@ -108,13 +108,13 @@ RSpec.describe Story do
         context "when blank" do
           let(:noun) { "" }
 
-          it { expect { subject.generate(json) }.to output("The `noun` input is blank.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `noun` input is blank./).to_stdout }
         end
 
         context "when too long" do
           let(:noun) { "antidisestablishmentarianism" }
 
-          it { expect { subject.generate(json) }.to output("The `noun` input is too long.\n").to_stdout }
+          it { expect { subject.generate(json) }.to output(/The `noun` input is too long./).to_stdout }
         end
       end
     end
@@ -125,7 +125,7 @@ RSpec.describe Story do
 
     context "one row of data" do
       let(:csv_rows) { [CSV::Row.new([], %w[2 mile school blue rock])] }
-      it { expect { subject.statistics }.to output("Statistics on 1 stored records:\n").to_stdout }
+      it { expect { subject.statistics }.to output(/Statistics on 1 stored records:/).to_stdout }
     end
   end
 end

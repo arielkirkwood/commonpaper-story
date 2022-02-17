@@ -1,4 +1,5 @@
 require "active_support"
+require "csv"
 require "erb"
 require "json"
 require "thor"
@@ -7,6 +8,7 @@ class ValidationError < StandardError
 end
 
 class Story < Thor
+  STORIES_FILE = "public/stories.csv"
   TEMPLATE = "One day Anna was walking her <%= number %> <%= unit_of_measure %> commute to <%= place %> and found a <%= adjective %> <%= noun %> on the ground."
 
   desc "generate STRING", "compose a story with a STRING that should be valid JSON (escaped if necessary for wrapping in a single set of quotes)"
@@ -14,6 +16,8 @@ class Story < Thor
   def generate(string)
     JSON.parse(string, symbolize_names: true) => {number:, unit_of_measure:, place:, adjective:, noun:}
     validate(number, unit_of_measure, place, adjective, noun)
+    persist(number, unit_of_measure, place, adjective, noun)
+
     puts ERB.new(TEMPLATE).result(binding)
   rescue JSON::ParserError
     puts "The provided JSON input failed to parse."
@@ -39,5 +43,11 @@ class Story < Thor
     raise ValidationError, "The `place` input is too long." if place.length > 20
     raise ValidationError, "The `adjective` input is too long." if adjective.length > 15
     raise ValidationError, "The `noun` input is too long." if noun.length > 15
+  end
+
+  def persist(number, unit_of_measure, place, adjective, noun)
+    CSV.open(STORIES_FILE, "a") do |file|
+      file.add_row([number, unit_of_measure, place, adjective, noun])
+    end
   end
 end

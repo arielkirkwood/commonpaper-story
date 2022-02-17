@@ -118,5 +118,10 @@ RSpec.describe Story do
         end
       end
     end
+
+    describe "persistence of successfully generated stories" do
+      # need to test that a CSV is generated
+      specify { expect { subject.generate(json) }.to output(expected_story).to_stdout }
+    end
   end
 end

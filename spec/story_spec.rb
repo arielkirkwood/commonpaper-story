@@ -37,7 +37,85 @@ RSpec.describe Story do
           }.to_json
         end
 
-        specify { expect { subject.generate(json) }.to output("The provided JSON is valid, but one or more of your inputs is missing.\n").to_stdout }
+        specify { expect { subject.generate(json) }.to output("The provided JSON is valid, but one or more of your inputs is missing in the JSON body.\n").to_stdout }
+      end
+    end
+
+    describe "additional validations on story inputs" do
+      describe "number" do
+        context "when non-numeric" do
+          let(:number) { "a" }
+
+          specify { expect { subject.generate(json) }.to output("The `number` input is not a number.\n").to_stdout }
+        end
+
+        context "when blank" do
+          let(:number) { "" }
+
+          specify { expect { subject.generate(json) }.to output("The `number` input is blank.\n").to_stdout }
+        end
+
+        context "when too many digits" do
+          let(:number) { 9999 }
+
+          specify { expect { subject.generate(json) }.to output("The `number` input is too long.\n").to_stdout }
+        end
+      end
+
+      describe "unit of measure" do
+        context "when blank" do
+          let(:unit_of_measure) { "" }
+
+          specify { expect { subject.generate(json) }.to output("The `unit_of_measure` input is blank.\n").to_stdout }
+        end
+
+        context "when too long" do
+          let(:unit_of_measure) { "miles and miles" }
+
+          specify { expect { subject.generate(json) }.to output("The `unit_of_measure` input is too long.\n").to_stdout }
+        end
+      end
+
+      describe "place" do
+        context "when blank" do
+          let(:place) { "" }
+
+          specify { expect { subject.generate(json) }.to output("The `place` input is blank.\n").to_stdout }
+        end
+
+        context "when too long" do
+          let(:place) { "a place that exceeds my imagination" }
+
+          specify { expect { subject.generate(json) }.to output("The `place` input is too long.\n").to_stdout }
+        end
+      end
+
+      describe "adjective" do
+        context "when blank" do
+          let(:adjective) { "" }
+
+          specify { expect { subject.generate(json) }.to output("The `adjective` input is blank.\n").to_stdout }
+        end
+
+        context "when too long" do
+          let(:adjective) { "supercalifragilistic" }
+
+          specify { expect { subject.generate(json) }.to output("The `adjective` input is too long.\n").to_stdout }
+        end
+      end
+
+      describe "noun" do
+        context "when blank" do
+          let(:noun) { "" }
+
+          specify { expect { subject.generate(json) }.to output("The `noun` input is blank.\n").to_stdout }
+        end
+
+        context "when too long" do
+          let(:noun) { "antidisestablishmentarianism" }
+
+          specify { expect { subject.generate(json) }.to output("The `noun` input is too long.\n").to_stdout }
+        end
       end
     end
   end

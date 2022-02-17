@@ -1,5 +1,5 @@
 # commonpaper-story
-My submission for the Common Paper engineering candidate assessment.
+My submission for the [Common Paper](https://commonpaper.com/) [engineering candidate assessment](https://github.com/CommonPaper/story-prompt).
 
 ## Setup
 To run the applications in this repo, you'll need to have Ruby 3.0 installed.

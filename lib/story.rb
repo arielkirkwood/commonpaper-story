@@ -1,19 +1,16 @@
+require "erb"
 require "thor"
 
 class Story < Thor
+  TEMPLATE = "One day Anna was walking her <%= number %> <%= unit_of_measure %> commute to <%= place %> and found a <%= adjective %> <%= noun %> on the ground."
+
   desc "story JSON", "compose a story with JSON"
 
-  def story(json)
-    puts template(json)
+  def story
+    puts ERB.new(TEMPLATE).result(binding)
   end
 
   private
-
-  def template(json)
-    <<~STORY
-      One day Anna was walking her #{number} #{unit_of_measure} commute to #{place} and found a #{adjective} #{noun} on the ground.
-    STORY
-  end
 
   def number
     2

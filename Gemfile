@@ -9,3 +9,5 @@ git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 gem "thor"
 
 gem "rspec", "~> 3.11"
+
+gem "erb", "~> 2.2"

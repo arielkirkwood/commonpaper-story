@@ -7,9 +7,21 @@ To run the applications in this repo, you'll need to have Ruby 3.0 installed.
 With Ruby installed, you should have access to Bundler via `bundle`; execute `bundle` to install the dependencies for this project.
 
 ## Running the application
-From there, you can `generate` a story passing escaped JSON wrapped in double quotes to the `bin/story` executable:
+Included in the `bin` folder is a `story` executable. Run it to see available commands:
+```
+Ariels-Retina-MacBook-Pro:commonpaper-story arielkirkwood$ bin/story
+Commands:
+  story generate STRING  # compose a story with a STRING that should be valid JSON (escaped if necessary for wrapping in a single set of quotes)
+  story help [COMMAND]   # Describe available commands or one specific command
+  story statistics       # view summary statistics of the data in public/stories.csv
+```
+
+To `generate` a story, pass escaped JSON wrapped in double quotes to the appropriate command:
 ```
 bin/story generate "{\"number\": 2, \"unit_of_measure\": \"mile\", \"place\": \"school\", \"adjective\": \"blue\", \"noun\": \"rock\"}"`
 ```
 
-Statistics coming next!
+To view `statistics`, just run the command:
+```
+bin/story statistics
+```

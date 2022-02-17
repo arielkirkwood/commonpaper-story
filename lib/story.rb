@@ -27,6 +27,14 @@ class Story < Thor
     puts e.message
   end
 
+  desc "statistics", "view summary statistics of the data in #{STORIES_FILE}"
+
+  def statistics
+    table = CSV.table(STORIES_FILE)
+
+    puts "Statistics on #{table.size} stored records:"
+  end
+
   private
 
   def validate(number, unit_of_measure, place, adjective, noun)
@@ -46,7 +54,7 @@ class Story < Thor
   end
 
   def persist(number, unit_of_measure, place, adjective, noun)
-    CSV.open(STORIES_FILE, "a") do |file|
+    CSV.open(STORIES_FILE, "a", write_headers: true) do |file|
       file.add_row([number, unit_of_measure, place, adjective, noun])
     end
   end

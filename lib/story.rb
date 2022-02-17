@@ -11,6 +11,8 @@ class Story < Thor
     JSON.parse(string, symbolize_names: true) => {number:, unit_of_measure:, place:, adjective:, noun:}
     puts ERB.new(TEMPLATE).result(binding)
   rescue JSON::ParserError
-    puts "The provided JSON input is invalid."
+    puts "The provided JSON input failed to parse."
+  rescue NoMatchingPatternError
+    puts "The provided JSON is valid, but one or more of your inputs is missing."
   end
 end

@@ -15,7 +15,7 @@ RSpec.describe Story do
       noun: noun
     }.to_json
   end
-  let(:expected_story) { "One day Anna was walking her #{number} #{unit_of_measure} commute to #{place} and found a #{adjective} #{noun} on the ground.\n" }
+  let(:expected_story) { (/One day Anna was walking her #{number} #{unit_of_measure} commute to #{place} and found a #{adjective} #{noun} on the ground./) }
 
   describe "#generate" do
     it { expect { subject.generate(json) }.to output(expected_story).to_stdout }

@@ -121,13 +121,14 @@ RSpec.describe Story do
   end
 
   describe "#statistics" do
-    let(:csv_rows) { [CSV::Row.new([], %w[2 mile school blue rock])] }
+    let(:csv_rows) { [CSV::Row.new(described_class::COLUMN_HEADER_LABELS, %w[2 mile school blue rock]),
+                      CSV::Row.new(described_class::COLUMN_HEADER_LABELS, %w[2 mile school blue rock])] }
 
     before { allow(CSV).to receive(:table).with(described_class::STORIES_FILE).and_return(CSV::Table.new(csv_rows)) }
 
-    it { expect { subject.statistics }.to output(/Statistics on 1 stored records:/).to_stdout }
+    it { expect { subject.statistics }.to output(/Statistics on 2 stored records:/).to_stdout }
 
-    context "many rows of data" do
+    context "42 rows of data" do
       let(:count) { 42 }
       let(:csv_rows) do
         rows = []

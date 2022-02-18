@@ -51,13 +51,12 @@ class Story < Thor
   private
 
   def mode(column, table)
-    candidate_values = table.values_at(column).flatten.uniq
-    return candidate_values.first if candidate_values.one?
+    candidate_values = table.values_at(column).flatten
+    return candidate_values.uniq.first if candidate_values.uniq.one?
 
-    candidate_appearances = candidate_values.map { |value| table.group_by { |row| row[column] }[value].length }
+    candidate_appearances = candidate_values.group_by(&:itself).transform_values(&:count)
 
-    candidate_values.first
-    # candidate_values.zip(candidate_appearances).
+    candidate_appearances.max_by(&:itself).first # returns the value; `last` would return the frequency
   end
 
   def validate(number, unit_of_measure, place, adjective, noun)

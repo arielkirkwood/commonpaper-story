@@ -8,6 +8,7 @@ class ValidationError < StandardError
 end
 
 class Story < Thor
+  COLUMN_HEADER_LABELS = [:number, :unit_of_measure, :place, :adjective, :noun]
   STORIES_FILE = "public/stories.csv"
   TEMPLATE = "One day Anna was walking her <%= number %> <%= unit_of_measure %> commute to <%= place %> and found a <%= adjective %> <%= noun %> on the ground."
 
@@ -34,20 +35,30 @@ class Story < Thor
 
     puts "Statistics on #{table.size} stored records:"
     puts ""
-    puts "Highest `number`:"
+    puts "Highest `number`: #{table.max_by { |row| row[:number] }[:number]}"
     puts ""
-    puts "Lowest `number`:"
+    puts "Lowest `number`: #{table.min_by { |row| row[:number] }[:number]}"
     puts ""
-    puts "Most frequent `unit_of_measure`:"
+    puts "Most frequent `unit_of_measure`: #{mode(:unit_of_measure, table)}"
     puts ""
-    puts "Most frequent `place`:"
+    puts "Most frequent `place`: #{mode(:place, table)}"
     puts ""
-    puts "Most frequent `adjective`:"
+    puts "Most frequent `adjective`: #{mode(:adjective, table)}"
     puts ""
-    puts "Most frequent `noun`:"
+    puts "Most frequent `noun`: #{mode(:noun, table)}"
   end
 
   private
+
+  def mode(column, table)
+    candidate_values = table.values_at(column).flatten.uniq
+    return candidate_values.first if candidate_values.one?
+
+    candidate_appearances = candidate_values.map { |value| table.group_by { |row| row[column] }[value].length }
+
+    candidate_values.first
+    # candidate_values.zip(candidate_appearances).
+  end
 
   def validate(number, unit_of_measure, place, adjective, noun)
     raise ValidationError, "The `number` input is blank." if number.blank?
@@ -66,8 +77,11 @@ class Story < Thor
   end
 
   def persist(number, unit_of_measure, place, adjective, noun)
-    CSV.open(STORIES_FILE, "a", write_headers: true) do |file|
-      file.add_row([number, unit_of_measure, place, adjective, noun])
+    table = CSV.table(STORIES_FILE)
+    table << [number, unit_of_measure, place, adjective, noun]
+
+    CSV.open(STORIES_FILE, "w+", write_headers: true, headers: COLUMN_HEADER_LABELS) do |file|
+      table.each { |row| file.add_row(row) }
     end
   end
 end

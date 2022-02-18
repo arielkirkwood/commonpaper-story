@@ -128,17 +128,6 @@ RSpec.describe Story do
 
     it { expect { subject.statistics }.to output(/Statistics on 2 stored records:/).to_stdout }
 
-    context "42 rows of data" do
-      let(:count) { 42 }
-      let(:csv_rows) do
-        rows = []
-        count.times { |time| rows.push(CSV::Row.new([], [time] + %w[mile school blue rock])) }
-        rows
-      end
-
-      it { expect { subject.statistics }.to output(/Statistics on #{count} stored records:/).to_stdout }
-    end
-
     describe "number statistics" do
       it { expect { subject.statistics }.to output(/Highest `number`: 2/).to_stdout }
       it { expect { subject.statistics }.to output(/Lowest `number`: 2/).to_stdout }
@@ -158,6 +147,66 @@ RSpec.describe Story do
 
     describe "noun statistics" do
       it { expect { subject.statistics }.to output(/Most frequent `noun`: rock/).to_stdout }
+    end
+
+    context "multiple values represented with equal frequency" do
+      let(:csv_rows) { [CSV::Row.new(described_class::COLUMN_HEADER_LABELS, %w[2 mile school blue rock]),
+                        CSV::Row.new(described_class::COLUMN_HEADER_LABELS, %w[2 kilometer home red coin]),
+                        CSV::Row.new(described_class::COLUMN_HEADER_LABELS, %w[2 nautical-mile shore green seaweed])] }
+
+      describe "number statistics" do
+        it { expect { subject.statistics }.to output(/Highest `number`: 2/).to_stdout }
+        it { expect { subject.statistics }.to output(/Lowest `number`: 2/).to_stdout }
+      end
+
+      describe "unit of length statistics" do
+        it { expect { subject.statistics }.to output(/Most frequent `unit_of_measure`: There is no mode./).to_stdout }
+      end
+
+      describe "place statistics" do
+        it { expect { subject.statistics }.to output(/Most frequent `place`: There is no mode./).to_stdout }
+      end
+
+      describe "adjective statistics" do
+        it { expect { subject.statistics }.to output(/Most frequent `adjective`: There is no mode./).to_stdout }
+      end
+
+      describe "noun statistics" do
+        it { expect { subject.statistics }.to output(/Most frequent `noun`: There is no mode./).to_stdout }
+      end
+    end
+
+    context "42 rows of data" do
+      let(:count) { 42 }
+      let(:csv_rows) do
+        rows = []
+        (0..19).each { |index| rows.push(CSV::Row.new(described_class::COLUMN_HEADER_LABELS, [index] + %w[mile school blue rock])) }
+        (20..41).each { |index| rows.push(CSV::Row.new(described_class::COLUMN_HEADER_LABELS, [index] + %w[kilometer home red coin])) }
+        rows
+      end
+
+      it { expect { subject.statistics }.to output(/Statistics on #{count} stored records:/).to_stdout }
+
+      describe "number statistics" do
+        it { expect { subject.statistics }.to output(/Highest `number`: 41/).to_stdout }
+        it { expect { subject.statistics }.to output(/Lowest `number`: 0/).to_stdout }
+      end
+
+      describe "unit of length statistics" do
+        it { expect { subject.statistics }.to output(/Most frequent `unit_of_measure`: kilometer/).to_stdout }
+      end
+
+      describe "place statistics" do
+        it { expect { subject.statistics }.to output(/Most frequent `place`: home/).to_stdout }
+      end
+
+      describe "adjective statistics" do
+        it { expect { subject.statistics }.to output(/Most frequent `adjective`: red/).to_stdout }
+      end
+
+      describe "noun statistics" do
+        it { expect { subject.statistics }.to output(/Most frequent `noun`: coin/).to_stdout }
+      end
     end
   end
 end

@@ -55,8 +55,9 @@ class Story < Thor
     return candidate_values.uniq.first if candidate_values.uniq.one?
 
     candidate_appearances = candidate_values.group_by(&:itself).transform_values(&:count)
+    return "There is no mode." if candidate_appearances.keys.count > 1 && candidate_appearances.values.uniq.one?
 
-    candidate_appearances.max_by(&:itself).first # returns the value; `last` would return the frequency
+    candidate_appearances.max_by(&:last).first # compare using the frequency (last), return the value (first)
   end
 
   def validate(number, unit_of_measure, place, adjective, noun)

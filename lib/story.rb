@@ -15,6 +15,10 @@ class Story < Thor
 
   desc "generate STRING", "compose a story with a STRING that should be valid JSON (escaped if necessary for wrapping in a single set of quotes)"
 
+  def self.exit_on_failure?
+    true
+  end
+
   def generate(string)
     JSON.parse(string, symbolize_names: true) => {number:, unit_of_measure:, place:, adjective:, noun:}
     validate(number, unit_of_measure, place, adjective, noun)

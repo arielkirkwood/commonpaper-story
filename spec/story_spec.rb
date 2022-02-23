@@ -176,6 +176,12 @@ RSpec.describe Story do
       end
     end
 
+    context "0 rows of data" do
+      let(:csv_rows) { [] }
+
+      it { expect { subject.statistics }.to output(/There are no stored records. Run `bin\/story generate` to create one!/).to_stdout }
+    end
+
     context "42 rows of data" do
       let(:count) { 42 }
       let(:csv_rows) do

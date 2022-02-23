@@ -1,6 +1,7 @@
 require "active_support"
 require "csv"
 require "erb"
+require "fileutils"
 require "json"
 require "thor"
 
@@ -31,7 +32,9 @@ class Story < Thor
   desc "statistics", "view summary statistics of the data in #{STORIES_FILE}"
 
   def statistics
+    FileUtils.touch STORIES_FILE
     table = CSV.table(STORIES_FILE)
+    return puts "There are no stored records. Run `bin/story generate` to create one!" if table.empty?
 
     puts "Statistics on #{table.size} stored records:"
     puts ""
@@ -77,6 +80,7 @@ class Story < Thor
   end
 
   def persist(number, unit_of_measure, place, adjective, noun)
+    FileUtils.touch STORIES_FILE
     table = CSV.table(STORIES_FILE)
     table << [number, unit_of_measure, place, adjective, noun]
 
